@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Union
+from typing import Dict, Union
 
 from recipes.backpack_printer import BACKPACK_PRINTER_RECIPES
 from recipes.composites import COMPOSITE_RECIPES
@@ -21,23 +21,26 @@ for d in (
     ALL_RECIPES.update(d)
 
 
-def build_bom(build_spec: defaultdict) -> defaultdict:
+def build_bom(build_spec: Dict[str, int]) -> defaultdict:
     """Reduce the provided build specification into the base resources required for construction."""
+    parts_list = defaultdict(int)
+    parts_list.update(build_spec)
+
     while any(
         (iter_part := part)
-        for part, quantity in build_spec.items()
+        for part, quantity in parts_list.items()
         if not isinstance(part, ResourceBase) and quantity > 0
     ):
-        part_quantity = build_spec[iter_part]
+        part_quantity = parts_list[iter_part]
         for subcomponent, subcomponent_quantity in ALL_RECIPES[iter_part].components.items():
-            build_spec[subcomponent] += part_quantity * subcomponent_quantity
+            parts_list[subcomponent] += part_quantity * subcomponent_quantity
 
-        build_spec[iter_part] = 0
+        parts_list[iter_part] = 0
 
-    return build_spec
+    return parts_list
 
 
-def build_table(build_spec: defaultdict) -> str:
+def build_table(build_spec: Dict[str, int]) -> str:
     """Prettyprint the output bill of materials."""
     deconstructed_build = build_bom(build_spec)
     required_materials = sorted(
