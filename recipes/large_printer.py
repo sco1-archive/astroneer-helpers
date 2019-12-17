@@ -1,5 +1,6 @@
-from recipes import composites
 from recipes.helpers import RecipeBase
 
 
-LARGE_ROVER = RecipeBase(components={composites.ALUMINUM_ALLOY: 2, composites.RUBBER: 2})
+LARGE_PRINTER_RECIPES = {
+    "LARGE_ROVER": RecipeBase(components={"ALUMINUM_ALLOY": 2, "RUBBER": 2}),
+}

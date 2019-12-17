@@ -1,5 +1,6 @@
 from recipes.helpers import RecipeBase
 from recipes.resources import RefinedResource
 
-
-FLOODLIGHT = RecipeBase(components={RefinedResource.TUNGSTEN: 2})
+BACKPACK_PRINTER_RECIPES = {
+    "FLOODLIGHT": RecipeBase(components={RefinedResource.TUNGSTEN: 2}),
+}
